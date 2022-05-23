@@ -5,6 +5,7 @@ install.packages("moments")
 install.packages("psych") 
 install.packages("readtext") 
 install.packages("hrbrthemes")
+install.packages("sjPlot")
 
 ###### Library  
 library(tidyverse) 
@@ -28,6 +29,8 @@ library(httr)
 library(jsonlite) 
 library(readtext) 
 
+library(sjPlot)
+library(sjmisc)
 
 ###### Datasets
 
@@ -783,6 +786,9 @@ stargazer(Model4, Model4b, Model4c, title="Results", align=TRUE, type = 'html', 
 ### johnson_neyman Plot Model 2
 johnson_neyman(model = Model2, pred = String, modx = Hosp)
 
+### Plot of interaction effect
+plot_model(Model2, type = "int")+theme_ipsum() 
+
 
 ### Predicted Values Model 2
 NewNorwayEnd$predModel2 <- plm:::predict.plm(Model2, NewNorwayEnd) 
@@ -858,8 +864,10 @@ NewNorwayEndPhase7 <-  filter(NewNorwayEnd, Phases == "7")
 
 
 ### johnson_neyman Plot Model 2c
-johnson_neyman(model = Model3c, pred = String, modx = Hosp) 
+johnson_neyman(model = Model2c, pred = String, modx = Hosp) 
 
+### Plot of interaction effect
+plot_model(Model2c, type = "int")+theme_ipsum() 
 
 ### Predicted Values Model 2c
 NewNorwayOnly$predModel2d <- plm:::predict.plm(Model2d, NewNorwayOnly) 
@@ -973,6 +981,24 @@ bgtest(Model2c)
 bgtest(Model3c)
 bgtest(Model3d)
 
+
+#### Testing for Outliers
+install.packages("outliers")
+library(outliers)
+
+chisq.out.test(NewNorway$High)
+chisq.out.test(NewNorway$String)
+chisq.out.test(NewNorway$Hosp)
+chisq.out.test(NewNorway$High, opposite = TRUE)
+chisq.out.test(NewNorway$String, opposite = TRUE)
+chisq.out.test(NewNorway$Hosp, opposite = TRUE)
+
+chisq.out.test(NewNorwayFinal$High)
+chisq.out.test(NewNorwayFinal$String)
+chisq.out.test(NewNorwayFinal$Hosp)
+chisq.out.test(NewNorwayFinal$High, opposite = TRUE)
+chisq.out.test(NewNorwayFinal$String, opposite = TRUE)
+chisq.out.test(NewNorwayFinal$Hosp, opposite = TRUE)
 
 
 #### Tabluation of datasets
